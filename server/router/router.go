@@ -34,6 +34,7 @@ func InitRouter()*gin.Engine {
 		auth.DELETE("/delete/:uid", DeleteUserById)
 		auth.POST("/addUser", PostAddUser)
 		auth.PUT("/update", PutUpdateUser)
+		auth.PUT("/updateRole", UpdateRole)
 
 		// 角色管理相关
 		auth.POST("/roleQuery", PostRoleQuery)

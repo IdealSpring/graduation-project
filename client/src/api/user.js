@@ -48,21 +48,17 @@ export default {
   // 删除用户
   deleteUser(data) {
     return request({
-      // url: '/auth/user/delete',
       url: '/auth/user/delete/' + data,
       method: 'delete',
       // data
     })
   },
 
-  /**
-   * 更新用户的角色
-   * @param perm
-   */
+  // 更新用户的角色
   updateUserRoles(data) {
     return request({
-      url: '/sys_user/role',
-      method: 'patch',
+      url: '/auth/user/updateRole',
+      method: 'put',
       data
     })
   }

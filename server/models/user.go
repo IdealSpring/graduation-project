@@ -29,6 +29,7 @@ type Role struct {
 	RoleId     int          `gorm:"column:id;primary_key" json:"roleId"`
 	RoleName   string       `gorm:"column:role_name" json:"roleName"`
 	Value      string       `gorm:"column:value" json:"val"`
+	Priority   int          `gorm:"column:priority" json:"priority"`
 	Perms      []Permission `gorm:"many2many:role_perm" json:"perms"` // 多对多关系
 	CreateTime time.Time    `gorm:"column:create_time" json:"createTime"`
 	UpdateTime time.Time    `gorm:"column:update_time" json:"updateTime"`
@@ -62,6 +63,10 @@ func (u *User) TableName() string {
 	return "user"
 }
 
+func (u *User) UpdateRole(userId int, roleId int) error {
+	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{RoleId:roleId}).Error
+}
+
 // 添加用户
 func (u *User) AddUser(username string, nick string, roleID int, pwd string) (int, time.Time, error) {
 	user := User{
@@ -83,8 +88,9 @@ func (u *User) AddUser(username string, nick string, roleID int, pwd string) (in
 	return id, created, err
 }
 
+// 更新用户 昵称 和 密码
 func (u *User) UpdateUser(userId int, nick string, pwd string) error {
-	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{Nick:nick, Password:pwd}).Error
+	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{Nick: nick, Password: pwd}).Error
 }
 
 // 删除用户

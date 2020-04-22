@@ -12,8 +12,8 @@
         </div>
         <div>
           <span style="font-size:20px;padding-top:20px;display:inline-block;">角色：</span>
-          <el-tag style="margin-right: 5px;" type="danger" v-if="roles.length==0" >游客（未配置任何角色）</el-tag>
-          <el-tag style="margin-right: 5px;" type="success" v-else v-for="r in roles" :key="r.val">{{r.roleName}}</el-tag>
+          <el-tag style="margin-right: 5px;" type="danger" v-if="role == null" >游客（未配置任何角色）</el-tag>
+          <el-tag style="margin-right: 5px;" type="success" v-else :key="role.val">{{role.roleName}}</el-tag>
         </div>
         <div>
           <span style="font-size:20px;padding-top:20px;display:inline-block;">权限：</span>
@@ -45,7 +45,7 @@
         'name',
         'nick',
         'avatar',
-        'roles',
+        'role',
         'perms'
       ])
     }

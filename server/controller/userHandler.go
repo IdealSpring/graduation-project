@@ -88,7 +88,7 @@ func GetUserInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"succ":  true,
 		"code":  200,
-		"roles": []models.Role{user.Role},
+		"role":  user.Role,
 		"perms": user.Role.Perms,
 		"nick":  user.Nick,
 		"name":  user.Username,
@@ -188,6 +188,7 @@ func PostAddUser(c *gin.Context) {
 	})
 }
 
+// 更新用户信息
 func PutUpdateUser(c *gin.Context) {
 	var param = bind.PostAddUserBindParam{}
 	c.Bind(&param)
@@ -197,8 +198,21 @@ func PutUpdateUser(c *gin.Context) {
 	utils.AssertErr(err)
 
 	c.JSON(http.StatusOK, gin.H{
-		"succ":    true,
+		"succ":       true,
 		"updateTime": time.Now(),
+	})
+}
+
+// 更新用户角色信息
+func UpdateRole(c *gin.Context) {
+	var userInfo = bind.UserInfoParam{}
+	c.Bind(&userInfo)
+
+	err := u.UpdateRole(userInfo.UserId, userInfo.RoleId)
+	utils.AssertErr(err)
+
+	c.JSON(http.StatusOK, gin.H{
+		"succ": true,
 	})
 }
 

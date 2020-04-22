@@ -39,13 +39,13 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-tooltip content="编辑" placement="top">
+          <el-tooltip content="编辑" placement="top" v-if="hasAdminRole(scope.row)">
             <el-button @click="handleUpdate(scope.$index,scope.row)" size="medium" type="info" icon="el-icon-edit" circle plain></el-button>
           </el-tooltip>
-          <el-tooltip content="修改角色" placement="top" v-if="!hasAdminRole(scope.row)">
+          <el-tooltip content="修改角色" placement="top" v-if="hasAdminRole(scope.row)">
             <el-button @click="handleUpdateUserRoles(scope.$index,scope.row)" size="medium" type="warning" icon="el-icon-star-off" circle plain></el-button>
           </el-tooltip>
-          <el-tooltip content="删除" placement="top" v-if="!hasAdminRole(scope.row)">
+          <el-tooltip content="删除" placement="top" v-if="hasAdminRole(scope.row)">
             <el-button @click="handleDelete(scope.$index,scope.row)" size="medium" type="danger" icon="el-icon-delete" circle plain></el-button>
           </el-tooltip>
           <el-popover trigger="hover" placement="top" v-else style="display: inline-block;">
@@ -89,6 +89,7 @@
           <el-select v-model="temp.roleId" clearable placeholder="请选择">
             <el-option
               v-for="item in roleOptions"
+              v-if="currentRole.priority > item.priority"
               :key="item.roleId"
               :label="item.roleName"
               :value="item.roleId">
@@ -116,13 +117,24 @@
     <!--弹出窗口：修改用户角色-->
     <el-dialog title="修改用户的角色" :visible.sync="editRolesDialogVisible" width="30%">
       <div>
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        请选择角色：
+        <el-select v-model="updateUserRolesData.roleId" clearable placeholder="请选择">
+          <el-option
+            v-for="item in roleOptions"
+            v-if="currentRole.priority > item.priority"
+            :key="item.roleId"
+            :label="item.roleName"
+            :value="item.roleId">
+          </el-option>
+        </el-select>
+
+        <!--<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;"></div>
         <el-checkbox-group v-model="updateUserRolesData.rids">
           <el-checkbox class="role-checkbox" v-for="role in roleOptions" :label="role.roleId" :key="role.roleId">
             {{role.roleName}}
           </el-checkbox>
-        </el-checkbox-group>
+        </el-checkbox-group>-->
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editRolesDialogVisible = false">取消</el-button>
@@ -140,6 +152,7 @@
   import {parseTime, resetTemp} from '@/utils'
   import {root,confirm,pageParamNames} from '@/utils/constants'
   import debounce from 'lodash/debounce'
+  import store from '@/store'
 
   export default {
 
@@ -223,14 +236,16 @@
         },
         checkAll: false,
         isIndeterminate: true,
+        // 当前用户角色
+        currentRole: store.getters.role,
         //所有角色(管理员除外)
         roleOptions:[],
         roleMap: new Map(),
         // 更新用户的角色的数据
         updateUserRolesData: {
           idx: null,
-          uid: null,
-          rids: []
+          userId: null,
+          roleId: null
         },
       }
 
@@ -262,10 +277,12 @@
         })
       },
 
+      // 有操作权限
       hasAdminRole(row){
-        if(row && row.roleList){
-          return row.roleList.some(role=>role.rval==root.rval)
+        if (this.currentRole.priority > row.Role.priority) {
+          return true
         }
+
         return false
       },
 
@@ -326,37 +343,27 @@
 
       //更新用户的角色
       handleUpdateUserRoles(idx, row) {
-
         // 显示用户的角色
         this.updateUserRolesData = {
           idx: idx,
-          uid: row.userId,
-          // rids: row.roleList.map(role=>role.rid)
+          userId: row.userId,
+          roleId: row.Role.roleId
         }
         // 显示弹窗
         this.editRolesDialogVisible = true
       },
 
+      // 更新用户角色信息
       checkUpdateUserRolesData() {
-        const noRolesSelected = this.updateUserRolesData && this.updateUserRolesData.rids && this.updateUserRolesData.rids.length ==0;
-        if(noRolesSelected){
-          this.$confirm('当前没有选中任何角色，会清除该用户已有的角色, 是否继续?', '提示', confirm).then(() => {
-            this.invokeUpdateUserRolesApi()
-          }).catch(() => {
-            this.$message("已取消编辑用户角色");
-          });
-        }else{
-          this.invokeUpdateUserRolesApi()
-        }
+        this.invokeUpdateUserRolesApi()
       },
 
+      // 更新用户角色信息
       invokeUpdateUserRolesApi(){
         userApi.updateUserRoles(this.updateUserRolesData).then(res => {
-          let newRoles = this.updateUserRolesData.rids.map(rid=>{
-            let rname = this.roleMap.get(rid);
-            if(rname) return {rid,rname}
-          })
-          this.tableData[this.updateUserRolesData.idx].roleList = newRoles
+          let row = this.roleOptions.filter(e => e.roleId == this.updateUserRolesData.roleId)
+          this.tableData[this.updateUserRolesData.idx].Role = row[0]
+
           this.editRolesDialogVisible = false
           this.$message.success("更新成功")
         })
@@ -398,6 +405,7 @@
 
             this.temp.Role = {}
             this.temp.Role.roleName = this.roleMap.get(this.temp.roleId)
+            this.temp.Role.priority = this.temp.roleId
 
             this.temp.roleList = []
             this.tableData.unshift(Object.assign({},this.temp))
