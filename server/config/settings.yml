@@ -1,0 +1,15 @@
+settings:
+  application:
+    env: dev
+    host: 0.0.0.0
+    isinit: true
+    logpath: temp/logs/logger.logger
+    name: server
+    port: 9099
+  database:
+    database: gproject
+    dbtype: mysql
+    host: 127.0.0.1
+    password: root
+    port: 3306
+    username: root
