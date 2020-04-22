@@ -14,3 +14,8 @@ type PostAddUserBindParam struct {
 	Pwd      string `json:"pwd"`
 	Pwd2     string `json:"pwd2"`
 }
+
+type UserInfoParam struct {
+	UserId   int    `json:"userId"`
+	RoleId   int    `json:"roleId"`
+}

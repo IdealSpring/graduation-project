@@ -91,7 +91,15 @@
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
-            this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            this.$store.dispatch('LoginByUsername', this.loginForm).then(res => {
+              if (res.data.code == -1) {
+                this.$message({
+                  showClose: true,
+                  message: "系统消息:" + res.data.msg,
+                  type: 'error'
+                });
+              }
+
               this.loading = false
               this.$router.push({path: '/'})
             }).catch(() => {

@@ -10,11 +10,12 @@ const user = {
     token: getToken(),
     name: '',
     nick: '',
+    role: null,
+    perms: [],
+
     avatar: avatorImg,
     introduction: '',
     visitor: false,
-    roles: [],
-    perms: [],
     setting: {
       articlePlatform: []
     }
@@ -45,8 +46,8 @@ const user = {
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_ROLE: (state, role) => {
+      state.role = role
     },
     SET_PERMS: (state, perms) => {
       state.perms = perms
@@ -65,7 +66,8 @@ const user = {
           const data = response.data
           commit('SET_TOKEN', data.token)
           setToken(response.data.token)
-          resolve()
+
+          resolve(response)
         }).catch(error => {
           reject(error)
         })
@@ -86,7 +88,7 @@ const user = {
           } else {
             commit('SET_VISITOR', false)
           }
-          commit('SET_ROLES', res.data.roles)
+          commit('SET_ROLE', res.data.role)
           commit('SET_PERMS', res.data.perms)
           commit('SET_NICK', res.data.nick)
           commit('SET_NAME', res.data.name)
@@ -102,7 +104,8 @@ const user = {
       return new Promise((resolve, reject) => {
         authApi.logout(state.token).then(() => {
           commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
+          commit('SET_ROLE', null)
+          commit('SET_PERMS', '')
           removeToken()
           resolve()
         }).catch(error => {
@@ -127,7 +130,7 @@ const user = {
         setToken(role)
         authApi.getUserInfo(role).then(response => {
           const data = response.data
-          commit('SET_ROLES', data.roles)
+          commit('SET_ROLE', data.role)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_INTRODUCTION', data.introduction)
