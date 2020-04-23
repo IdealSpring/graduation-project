@@ -28,4 +28,6 @@ client/*.suo
 client/*.ntvs*
 client/*.njsproj
 client/*.sln
-server/util/
+server/tmp
+
+

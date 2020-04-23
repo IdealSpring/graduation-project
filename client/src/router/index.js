@@ -62,13 +62,13 @@ export const asyncRouterMap = [
         path: 'user_manage',
         name: 'user_manage',
         component: _import('_system/user/index'),
-        meta: { perm: 'm:user:info', title: '信息管理'/*, icon: 'chart'*/, noCache: true }
+        meta: { perm: 'm:user:info', title: '信息管理', noCache: true }
       },
       {
         path: 'role_manage',
         name: 'role_manage',
         component: _import('_system/role/index'),
-        meta: { perm: 'm:user:role', title: '角色管理'/*, icon: 'chart'*/, noCache: true },
+        meta: { perm: 'm:user:role', title: '角色管理', noCache: true },
       },
       {
         hidden: true,
@@ -87,14 +87,14 @@ export const asyncRouterMap = [
       {
         path: 'release_manage',
         name: 'release_manage',
-        component: _import('_system/user/index'),
-        meta: { perm: 'm:release:sys', title: '信息管理', icon: 'chart', noCache: true }
+        component: _import('_system/release/sys/index'),
+        meta: { perm: 'm:release:sys', title: '系统发行', noCache: true }
       },
       {
         path: 'show_manage',
         name: 'show_manage',
         component: _import('_system/role/index'),
-        meta: { perm: 'm:release:show', title: '角色管理', icon: 'chart', noCache: true },
+        meta: { perm: 'm:release:show', title: '发行省份', noCache: true },
       },
     ]
   },
