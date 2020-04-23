@@ -18,6 +18,7 @@ func InitRouter()*gin.Engine {
 	// 添加路由规则
 	r.POST("/login", LoginHandler)
 
+	// 用户相关路由
 	auth := r.Group("/auth/user")
 	auth.Use(middleware.AuthMiddleware)
 	{
@@ -38,6 +39,13 @@ func InitRouter()*gin.Engine {
 
 		// 角色管理相关
 		auth.POST("/roleQuery", PostRoleQuery)
+	}
+
+	// 发行省份相关路由
+	release := r.Group("/auth/release")
+	release.Use(middleware.AuthMiddleware)
+	{
+		release.POST("/queryProvince", PostQueryProvince)
 	}
 
 	return r
