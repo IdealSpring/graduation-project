@@ -19,23 +19,24 @@
               v-loading.body="tableLoading"
               element-loading-text="加载中"
               border fit highlight-current-row>
-      <el-table-column prop="userId" label="用户id"></el-table-column>
-      <el-table-column prop="username" label="登录名"></el-table-column>
-      <el-table-column prop="nick" label="昵称"></el-table-column>
+      <el-table-column prop="userId" label="用户Id" width="65" align="center"></el-table-column>
+      <el-table-column prop="username" label="登录名" align="center"></el-table-column>
+      <el-table-column prop="nick" label="昵称" align="center"></el-table-column>
 
-      <el-table-column prop="Role.roleName" label="角色"></el-table-column>
+      <el-table-column prop="Role.roleName" label="角色" align="center"></el-table-column>
+      <el-table-column prop="Province.provinceName" label="所属区域" align="center"></el-table-column>
 
-      <el-table-column prop="createTime" label="创建时间">
+      <el-table-column prop="createTime" label="创建时间" align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.createTime)"></span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间">
+      <el-table-column prop="updateTime" label="更新时间" align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.updateTime)"></span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope">
           <el-tooltip content="编辑" placement="top" v-if="hasAdminRole(scope.row)">
             <el-button @click="handleUpdate(scope.$index,scope.row)" size="medium" type="info" icon="el-icon-edit"
@@ -94,6 +95,17 @@
               :key="item.roleId"
               :label="item.roleName"
               :value="item.roleId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="所属区域">
+          <el-select v-model="temp.provinceId" clearable placeholder="请选择">
+            <el-option
+              v-for="item in provinceOptions"
+              :key="item.provinceId"
+              :label="item.provinceName"
+              :value="item.provinceId">
             </el-option>
           </el-select>
         </el-form-item>
@@ -205,11 +217,13 @@
           username: null,
           nick: null,
           roleId: null,
+          Role: null,
           pwd: null,
           pwd2: null,
-          roleId: null,
           createTime: null,
-          updateTime: null
+          updateTime: null,
+          provinceId: null,
+          Province: null
         },
         textMap: {
           update: '编辑用户',
@@ -224,9 +238,12 @@
         isIndeterminate: true,
         // 当前用户角色
         currentRole: store.getters.role,
-        //所有角色(管理员除外)
+        // 所有角色(管理员除外)
         roleOptions: [],
         roleMap: new Map(),
+        // 发行省份
+        provinceOptions: [],
+        provinceMap: new Map(),
         // 更新用户的角色的数据
         updateUserRolesData: {
           idx: null,
@@ -252,7 +269,7 @@
     methods: {
 
       initData() {
-        //所有角色选项
+        // 所有角色选项
         optionApi.listRoleOptions().then(res => {
           res.data.options.forEach(obj => {
             if (obj.val2 != root.rval) {//排除管理员
@@ -261,6 +278,15 @@
             }
           })
         })
+
+        // 获取所有发行省份
+        optionApi.listOprovinceOptions().then(res => {
+          res.data.options.forEach(obj => {
+            this.provinceOptions.push(obj)
+            this.provinceMap.set(obj.provinceId, obj)
+          })
+        })
+
       },
 
       // 有操作权限
@@ -311,6 +337,10 @@
           const tempData = Object.assign({}, this.temp)//copy obj
           userApi.updateUser(tempData).then(res => {
             tempData.updateTime = res.data.updateTime
+
+            tempData.Province = {}
+            tempData.Province.provinceName = this.provinceMap.get(this.temp.provinceId).provinceName
+
             this.tableData.splice(tempData.idx, 1, tempData)
             this.dialogFormVisible = false
             this.$message.success('更新成功')
@@ -383,6 +413,9 @@
             this.temp.Role = {}
             this.temp.Role.roleName = this.roleMap.get(this.temp.roleId)
             this.temp.Role.priority = this.temp.roleId
+
+            this.temp.Province = {}
+            this.temp.Province.provinceName = this.provinceMap.get(this.temp.provinceId).provinceName
 
             this.temp.roleList = []
             this.tableData.unshift(Object.assign({}, this.temp))

@@ -46,6 +46,7 @@ func InitRouter()*gin.Engine {
 	release.Use(middleware.AuthMiddleware)
 	{
 		release.POST("/queryProvince", PostQueryProvince)
+		release.GET("/option/province", GetAllProvice)
 	}
 
 	return r
