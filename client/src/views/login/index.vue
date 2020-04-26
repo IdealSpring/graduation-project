@@ -25,15 +25,19 @@
                  @click.native.prevent="handleLogin">登录
       </el-button>
       <div class="tips">
-        <span>管理员帐号 : admin</span>
+        <span>总局管理员帐号 : admin</span>
         <span>密码 : 123456</span>
       </div>
       <div class="tips">
-        <span style="margin-right:18px;">普通用户帐号 : guanyu</span>
+        <span style="margin-right:18px;">省级管理员帐号 : pro-admin</span>
         <span>密码 : 123456</span>
       </div>
       <div class="tips">
-        <span style="margin-right:18px;">普通用户帐号 : zhangfei</span>
+        <span style="margin-right:18px;">数据管理员帐号 : data-admin</span>
+        <span>密码 : 123456</span>
+      </div>
+      <div class="tips">
+        <span style="margin-right:18px;">稽查管理员帐号 : audit-admin</span>
         <span>密码 : 123456</span>
       </div>
 

@@ -136,14 +136,6 @@ func PostQuery(c *gin.Context) {
 		pages++
 	}
 
-	//var u = models.User{
-	//	UserId:     1,
-	//	Username:   "小明",
-	//	Nick:       "名命名",
-	//	Password:   "123456",
-	//	CreateTime: time.Now(),
-	//	UpdateTime: time.Now(),
-	//}
 	var page = utils.Page{
 		Records: userList,
 		Current: current,
@@ -178,7 +170,7 @@ func PostAddUser(c *gin.Context) {
 	var param = bind.PostAddUserBindParam{}
 	c.Bind(&param)
 
-	uid, created, err := u.AddUser(param.Username, param.Nick, param.RoleId, param.Pwd)
+	uid, created, err := u.AddUser(param.Username, param.Nick, param.RoleId, param.ProvinceId, param.Pwd)
 	utils.AssertErr(err)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -193,7 +185,9 @@ func PutUpdateUser(c *gin.Context) {
 	var param = bind.PostAddUserBindParam{}
 	c.Bind(&param)
 
-	err := u.UpdateUser(param.UserId, param.Nick, param.Pwd)
+	fmt.Println("----------------------------------------------", param)
+
+	err := u.UpdateUser(param.UserId, param.Nick, param.Pwd, param.ProvinceId)
 
 	utils.AssertErr(err)
 

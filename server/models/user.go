@@ -41,9 +41,12 @@ type User struct {
 	Username string `gorm:"column:username" json:"username"`
 	Nick     string `gorm:"column:nick" json:"nick"`
 	Password string `gorm:"column:password" json:"password"`
-	RoleId   int    `gorm:"column:role_id" json:"roleId"`
 
-	Role Role `gorm:"foreignkey:RoleId"` //指定关联外键
+	RoleId int  `gorm:"column:role_id" json:"roleId"`
+	Role   Role `gorm:"foreignkey:RoleId"` //指定关联外键
+
+	ProvinceId int      `gorm:"column:province_id" json:"provinceId"`
+	Province   Province `gorm:"foreignkey:ProvinceId"` //指定关联外键
 
 	CreateTime time.Time `gorm:"column:create_time" json:"createTime"`
 	UpdateTime time.Time `gorm:"column:update_time" json:"updateTime"`
@@ -64,15 +67,16 @@ func (u *User) TableName() string {
 }
 
 func (u *User) UpdateRole(userId int, roleId int) error {
-	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{RoleId:roleId}).Error
+	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{RoleId: roleId}).Error
 }
 
 // 添加用户
-func (u *User) AddUser(username string, nick string, roleID int, pwd string) (int, time.Time, error) {
+func (u *User) AddUser(username string, nick string, roleID int, provinceId int, pwd string) (int, time.Time, error) {
 	user := User{
 		Username:   username,
 		Nick:       nick,
 		RoleId:     roleID,
+		ProvinceId: provinceId,
 		Password:   pwd,
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
@@ -89,8 +93,8 @@ func (u *User) AddUser(username string, nick string, roleID int, pwd string) (in
 }
 
 // 更新用户 昵称 和 密码
-func (u *User) UpdateUser(userId int, nick string, pwd string) error {
-	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{Nick: nick, Password: pwd}).Error
+func (u *User) UpdateUser(userId int, nick string, pwd string, provinceId int) error {
+	return orm.DB.Model(User{}).Where("id = ?", userId).Update(User{Nick: nick, Password: pwd, ProvinceId: provinceId}).Error
 }
 
 // 删除用户
@@ -100,7 +104,6 @@ func (u *User) DeleteById(id int) error {
 
 // 根据条件查询页面信息
 func (u *User) FindUserPageByCondition(nick string, current int, size int) ([]User, int) {
-	//userDB := orm.DB.Model(&User{}).Where(&User{Nick: nick})
 	userDB := orm.DB.Model(&User{}).Where("nick like ?", fmt.Sprintf("%%%s%%", nick))
 	var total int
 	userDB.Count(&total)
@@ -111,6 +114,7 @@ func (u *User) FindUserPageByCondition(nick string, current int, size int) ([]Us
 	var retUserList []User
 	for _, user := range userList {
 		orm.DB.Model(&user).Related(&user.Role)
+		orm.DB.Model(&user).Related(&user.Province)
 		retUserList = append(retUserList, user)
 	}
 

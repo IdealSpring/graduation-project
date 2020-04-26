@@ -7,15 +7,16 @@ type PostQueryBindParam struct {
 }
 
 type PostAddUserBindParam struct {
-	UserId   int    `json:"userId"`
-	Username string `json:"username"`
-	Nick     string `json:"nick"`
-	RoleId   int    `json:"roleId"`
-	Pwd      string `json:"pwd"`
-	Pwd2     string `json:"pwd2"`
+	UserId     int    `json:"userId"`
+	Username   string `json:"username"`
+	Nick       string `json:"nick"`
+	RoleId     int    `json:"roleId"`
+	ProvinceId int    `json:"provinceId"`
+	Pwd        string `json:"pwd"`
+	Pwd2       string `json:"pwd2"`
 }
 
 type UserInfoParam struct {
-	UserId   int    `json:"userId"`
-	RoleId   int    `json:"roleId"`
+	UserId int `json:"userId"`
+	RoleId int `json:"roleId"`
 }

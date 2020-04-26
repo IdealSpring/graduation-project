@@ -8,7 +8,6 @@ export default {
   // 查询用户
   queryUser(queryParam,pageParam) {
     return request({
-      // url: '/sys_user/query',
       url: '/auth/user/query',
       method: 'post',
       data: {

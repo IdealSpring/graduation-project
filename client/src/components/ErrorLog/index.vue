@@ -1,4 +1,5 @@
 <template>
+
   <div v-if="errorLogs.length>0">
     <el-badge :is-dot="true" style="line-height: 30px;" @click.native="dialogTableVisible=true">
       <el-button size="small" type="danger" class="bug-btn">
@@ -19,15 +20,18 @@
               <el-tag type="danger">{{ scope.row.err.message }}</el-tag>
             </div>
             <br/>
+
             <div>
               <span class="message-title" style="padding-right: 10px;">Info: </span>
               <el-tag type="warning">{{scope.row.vm.$vnode.tag}} error in {{scope.row.info}}</el-tag>
             </div>
             <br/>
+
             <div>
               <span class="message-title" style="padding-right: 16px;">Url: </span>
               <el-tag type="success">{{scope.row.url}}</el-tag>
             </div>
+
           </template>
         </el-table-column>
         <el-table-column label="Stack">
@@ -39,6 +43,7 @@
     </el-dialog>
 
   </div>
+
 </template>
 
 <script>

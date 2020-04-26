@@ -93,7 +93,7 @@ export const asyncRouterMap = [
       {
         path: 'show_manage',
         name: 'show_manage',
-        component: _import('_system/role/index'),
+        component: _import('_system/release/show/index'),
         meta: { perm: 'm:release:show', title: '发行省份', noCache: true },
       },
     ]
@@ -105,8 +105,8 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'statistics_manage',
-        name: 'statistics',
-        component: _import('_system/user/index'),
+        name: 'statistics_manage',
+        component: _import('_system/statistics/statistics'),
         meta: { perm: 'm:statistics', title: '数据统计', icon: 'chart', noCache: true }
       },
     ]
@@ -119,14 +119,26 @@ export const asyncRouterMap = [
       {
         path: 'politics_release_manage',
         name: 'politics_release_manage',
-        component: _import('_system/user/index'),
-        meta: { perm: 'm:politics:release', title: '税收政策下发', icon: 'chart', noCache: true }
+        component: _import('_system/politics/release/release'),
+        meta: { perm: 'm:politics:release', title: '税收政策下发', noCache: true }
       },
       {
         path: 'politics_guide_manage',
         name: 'politics_guide_manage',
-        component: _import('_system/role/index'),
-        meta: { perm: 'm:politics:guide', title: '业务指导协调', icon: 'chart', noCache: true },
+        component: _import('errorPage/404'),
+        meta: { perm: 'm:politics:guide', title: '业务指导协调', noCache: true },
+      },
+      {
+        path: 'politics_report_manage',
+        name: 'politics_report_manage',
+        component: _import('errorPage/404'),
+        meta: { perm: 'm:politics:report', title: '工作汇报', noCache: true },
+      },
+      {
+        path: 'politics_notify_manage',
+        name: 'politics_notify_manage',
+        component: _import('errorPage/404'),
+        meta: { perm: 'm:politics:notify', title: '发布通知', noCache: true },
       },
     ]
   },
@@ -138,14 +150,14 @@ export const asyncRouterMap = [
       {
         path: 'log_loginlog_manage',
         name: 'log_loginlog_manage',
-        component: _import('_system/user/index'),
-        meta: { perm: 'm:log:loginlog', title: '登录日志', icon: 'chart', noCache: true }
+        component: _import('_system/log/loginlog'),
+        meta: { perm: 'm:log:loginlog', title: '登录日志', noCache: true }
       },
       {
         path: 'log_operlog_manage',
         name: 'log_operlog_manage',
-        component: _import('_system/role/index'),
-        meta: { perm: 'm:log:operlog', title: '业务指导协调', icon: 'chart', noCache: true },
+        component: _import('_system/log/operlog'),
+        meta: { perm: 'm:log:operlog', title: '操作日志', noCache: true },
       },
     ]
   },
