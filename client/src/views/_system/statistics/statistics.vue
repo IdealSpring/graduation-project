@@ -1,20 +1,29 @@
 <template>
   <div class="app-container">
     <div v-if="hasAdminRole()">
-      <el-row :gutter="10">
-        <el-col :xs="10" :sm="10" :md="10" :lg="10" :xl="10">
-          <div :style="{height:'500px'}"  style="background: #F5F5F5; border-radius: 4px;" ref="myEchart"></div>
+      <el-row  :gutter="20">
+        <el-col :span="10">
+          <el-card>
+            <div :style="{height:'480px'}"  style="background: #F5F5F5; border-radius: 4px;" ref="myEchart"></div>
+          </el-card>
         </el-col>
 
-        <el-col :xs="14" :sm="14" :md="14" :lg="14" :xl="14">
-          <div :style="{height:'500px'}"  style="background: #F5F5F5; border-radius: 4px;" ref="myEchart2"></div>
+        <el-col  :span="14">
+          <el-card>
+            <div :style="{height:'480px'}"  style="background: #F5F5F5; border-radius: 4px;" ref="myEchart2"></div>
+          </el-card>
         </el-col>
       </el-row>
     </div>
     <div v-else>
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <div :style="{height:'500px'}"  style="background: #F5F5F5; border-radius: 4px;" ref="myEchart3"></div>
-      </el-col>
+      <el-row>
+        <el-col :span="24">
+          <el-card>
+            <div :style="{height:'480px'}"  style="background: #F5F5F5; border-radius: 4px;" ref="myEchart3"></div>
+          </el-card>
+        </el-col>
+      </el-row>
+
     </div>
 
 
