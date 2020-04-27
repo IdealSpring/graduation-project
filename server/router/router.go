@@ -14,6 +14,8 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.CrossDomain)
 	// 统一异常处理中间件
 	r.Use(middleware.CustomError)
+	// 登录日志和操作日志
+	r.Use(middleware.LoginAndOperationLogToDB)
 
 	// 添加路由规则
 	r.POST("/login", LoginHandler)
@@ -53,6 +55,19 @@ func InitRouter() *gin.Engine {
 		release.POST("/queryProvince", PostQueryProvince)
 		release.GET("/option/province", GetAllProvice)
 		release.POST("/addProvince", PostAddProvince)
+	}
+
+	// 日志相关路由
+	operationLog := r.Group("/auth/log")
+	operationLog.Use(middleware.AuthMiddleware)
+	{
+		// 登录日志
+		operationLog.DELETE("/loggin/deleteAll", DeleteDeleteAllLoginLog)
+
+		// 操作日志
+		operationLog.POST("/operation/queryDataToPage", PostFetchDataToPage)
+		operationLog.DELETE("/operation/delete/:logId", DeleteOperationLog)
+		operationLog.DELETE("/operation/deleteAll", DeleteDeleteAllOperationLog)
 	}
 
 	return r

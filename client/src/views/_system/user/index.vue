@@ -26,12 +26,12 @@
       <el-table-column prop="Role.roleName" label="角色" align="center"></el-table-column>
       <el-table-column prop="Province.provinceName" label="所属区域" align="center"></el-table-column>
 
-      <el-table-column prop="createTime" label="创建时间" align="center">
+      <el-table-column prop="createTime" label="创建时间" width="160"  align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.createTime)"></span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" align="center">
+      <el-table-column prop="updateTime" label="更新时间" width="160"  align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.updateTime)"></span>
         </template>

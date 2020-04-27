@@ -2,8 +2,8 @@
   <div class="app-container">
     <!--查询-->
     <el-row>
-      <el-input v-model="tableQuery.provinceName" placeholder="请输入模块" style="width: 20%;"/>
-      <el-input v-model="tableQuery.provinceName2" placeholder="请输入操作人员" style="width: 20%;"/>
+      <el-input v-model="tableQuery.moduleName" placeholder="请输入模块" style="width: 20%;"/>
+      <el-input v-model="tableQuery.username" placeholder="请输入操作人员" style="width: 20%;"/>
       <span style="margin-right: 15px;"/>
       <el-tooltip content="搜索" placement="top">
         <el-button icon="el-icon-search" circle @click="fetchData()"></el-button>
@@ -14,7 +14,7 @@
     <div style="margin-bottom: 30px;"></div>
 
     <!--按钮-->
-    <el-button type="danger" icon="el-icon-delete" size="mini">清空</el-button>
+    <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteAllOperationLog()">清空</el-button>
 
 
     <!--占位框-->
@@ -26,25 +26,26 @@
               v-loading.body="tableLoading"
               element-loading-text="Loading"
               :data="tableData">
-      <el-table-column prop="provinceId" label="日志ID" width="65"/>
-      <el-table-column prop="provinceName" label="系统模块"/>
-      <el-table-column prop="userSize" label="请求方式"/>
-      <el-table-column prop="userSize" label="操作接口"/>
-      <el-table-column prop="userSize" label="主机"/>
-      <el-table-column prop="userSize" label="操作地点"/>
-      <el-table-column prop="userSize" label="操作人员"/>
+      <el-table-column prop="logId" label="日志ID" width="65" align="center"/>
+      <el-table-column prop="moduleName" label="系统模块" align="center"/>
+      <el-table-column prop="operationType" label="操作类型" align="center"/>
+      <el-table-column prop="method" label="请求方式" align="center"/>
+      <el-table-column prop="ip" label="主机" align="center"/>
+      <el-table-column prop="uri" label="操作接口" align="center"/>
+      <el-table-column prop="status" label="操作状态" align="center"/>
+      <el-table-column prop="username" label="操作人员" align="center"/>
 
-      <el-table-column prop="createTime" label="操作时间">
+      <el-table-column prop="createTime" label="操作时间" width="160" align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.createTime)"></span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-tooltip content="删除" placement="top">
-            <el-button @click="" size="medium" type="danger" icon="el-icon-remove"
-                       circle plain />
+            <el-button @click="handleDelete(scope.$index,scope.row)" size="medium" type="danger" icon="el-icon-remove"
+                       circle plain/>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -68,8 +69,9 @@
 </template>
 
 <script>
-  import provinceApi from '@/api/province'
+  import logApi from '@/api/log'
   import { parseTime } from '@/utils'
+  import debounce from 'lodash/debounce'
   import { pageParamNames, confirm, root } from '@/utils/constants'
 
   export default {
@@ -78,8 +80,10 @@
     data() {
       return {
         tableQuery: {
-          provinceName: null,
-          provinceName2: null,
+          isLoginOrLogout: false,
+          moduleName: null,
+          username: null,
+          nick: null
         },
         tableLoading: false,
         tableData: [],
@@ -96,7 +100,15 @@
       this.fetchData()
     },
 
-    watch: {},
+    watch: {
+      //延时查询
+      'tableQuery.moduleName': debounce(function() {
+        this.fetchData()
+      }, 500),
+      'tableQuery.username': debounce(function() {
+        this.fetchData()
+      }, 500)
+    },
 
     methods: {
       // 解析时间
@@ -120,6 +132,33 @@
         this.fetchData()
       },
 
+      // 删除所有操作日志
+      deleteAllOperationLog() {
+        this.$confirm('您确定要清除所有操作日志？', '提示', confirm).then(() => {
+          logApi.deleteAllOperationLog().then(res => {
+            this.fetchData()
+
+            this.$message.success('删除成功')
+          })
+        }).catch(() => {
+          this.$message.info('已取消删除')
+        })
+      },
+
+      // 删除
+      handleDelete(idx, row) {
+        this.$confirm('您确定要永久删除该条日志？', '提示', confirm).then(() => {
+          logApi.deleteLog(row.logId).then(res => {
+            this.tableData.splice(idx, 1)
+            --this.tablePage.total
+            this.$message.success('删除成功')
+          })
+        }).catch(() => {
+          this.$message.info('已取消删除')
+        })
+
+      },
+
       // 获取表格数据
       fetchData(current) {
         if (current) {
@@ -127,7 +166,7 @@
         }
 
         this.tableLoading = true
-        provinceApi.fetchDataToPage(this.tableQuery, this.tablePage).then(res => {
+        logApi.fetchDataToPage(this.tableQuery, this.tablePage).then(res => {
           let page = res.data.page
 
           this.tableData = page.records
@@ -145,6 +184,7 @@
           })
         })
       }
+
     }
   }
 </script>
