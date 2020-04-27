@@ -24,6 +24,9 @@ func LoginHandler(c *gin.Context) {
 	token, err := user.Login()
 	utils.AssertErr(err, -1)
 
+	// 设置 current_user
+	c.Set("current_user", models.User{UserId:user.UserId})
+
 	c.JSON(http.StatusOK, gin.H{
 		"succ":   true,
 		"code":   http.StatusOK,

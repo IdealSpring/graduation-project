@@ -5,7 +5,7 @@
       <el-input style="width:200px;" v-model="tableQuery.roleName" placeholder="角色名"></el-input>
       <span style="margin-right: 15px;"></span>
       <el-tooltip class="item" content="搜索" placement="top">
-        <el-button icon="el-icon-search" circle @click="fetchData()"></el-button>
+        <el-button icon="el-icon-search" circle @click="fetchData(1)"></el-button>
       </el-tooltip>
     </el-row>
     <div style="margin-bottom: 30px;"></div>
@@ -143,10 +143,7 @@
 
     watch: {
       //延时查询
-      'tableQuery.rname': debounce(function() {
-        this.fetchData()
-      }, 500),
-      'tableQuery.rval': debounce(function() {
+      'tableQuery.roleName': debounce(function() {
         this.fetchData()
       }, 500)
     },//watch
@@ -166,7 +163,11 @@
         this.fetchData()
       },
       //查询
-      fetchData() {
+      fetchData(current) {
+        if (current) {
+          this.tablePage.current = current
+        }
+
         this.tableLoading = true
         roleApi.queryRole(this.tableQuery, this.tablePage).then(res => {
           this.tableData = res.data.page.records

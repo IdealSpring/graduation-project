@@ -24,22 +24,22 @@
               v-loading.body="tableLoading"
               element-loading-text="Loading"
               :data="tableData">
-      <el-table-column prop="provinceId" label="省份ID"/>
-      <el-table-column prop="provinceName" label="发行省份"/>
-      <el-table-column prop="userCount" label="用户数量"/>
+      <el-table-column prop="provinceId" label="省份ID" align="center"/>
+      <el-table-column prop="provinceName" label="发行省份" align="center"/>
+      <el-table-column prop="userCount" label="用户数量" align="center"/>
 
-      <el-table-column prop="createTime" label="创建时间">
+      <el-table-column prop="createTime" label="创建时间" align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.createTime)"></span>
         </template>
       </el-table-column>
-      <el-table-column prop="updateTime" label="更新时间">
+      <el-table-column prop="updateTime" label="更新时间" align="center">
         <template slot-scope="scope">
           <span v-text="parseTime(scope.row.updateTime)"></span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center" width="150">
         <template slot-scope="scope">
           是/否禁用:
           <el-switch v-model="scope.row.ban" inactive-color="#13ce66" active-color="#ff4949"/>
