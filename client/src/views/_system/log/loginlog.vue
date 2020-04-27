@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import releaseProvince from '@/api/release_province'
+  import provinceApi from '@/api/province'
   import { parseTime } from '@/utils'
   import { pageParamNames, confirm, root } from '@/utils/constants'
 
@@ -127,7 +127,7 @@
         }
 
         this.tableLoading = true
-        releaseProvince.fetchDataToPage(this.tableQuery, this.tablePage).then(res => {
+        provinceApi.fetchDataToPage(this.tableQuery, this.tablePage).then(res => {
           let page = res.data.page
 
           this.tableData = page.records
