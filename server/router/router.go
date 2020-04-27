@@ -7,7 +7,7 @@ import (
 )
 
 // 初始化路由
-func InitRouter()*gin.Engine {
+func InitRouter() *gin.Engine {
 	r := gin.Default()
 
 	// 跨域处中间件
@@ -38,7 +38,12 @@ func InitRouter()*gin.Engine {
 		auth.PUT("/updateRole", UpdateRole)
 
 		// 角色管理相关
-		auth.POST("/roleQuery", PostRoleQuery)
+		auth.POST("/roleQuery", PostRoleQueryToPage)
+		auth.GET("/rolePerms/:roleId", GetRolePerms)
+		auth.PUT("/role/updatePerm", PutUpdatePerm)
+		auth.POST("/addRole", PostAddRole)
+		auth.PUT("/role/updateRole", PutUpdateRole)
+		auth.DELETE("/role/delete", DeleteRole)
 	}
 
 	// 发行省份相关路由
