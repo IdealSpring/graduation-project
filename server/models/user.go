@@ -8,33 +8,6 @@ import (
 	"time"
 )
 
-// 权限表
-type Permission struct {
-	PermId     int       `gorm:"column:id" json:"permId"`
-	PermName   string    `gorm:"column:perm_name" json:"name"`
-	Value      string    `gorm:"column:value" json:"val"`
-	PermType   int       `gorm:"column:type" json:"permType"`
-	CreateTime time.Time `gorm:"column:create_time" json:"createTime"`
-	UpdateTime time.Time `gorm:"column:update_time" json:"updateTime"`
-}
-
-// 角色权限关联表
-type RolePerm struct {
-	RoleId       int `gorm:"column:role_id" json:"roleId"`
-	PermissionId int `gorm:"column:permission_id" json:"permissionId"`
-}
-
-// 角色表
-type Role struct {
-	RoleId     int          `gorm:"column:id;primary_key" json:"roleId"`
-	RoleName   string       `gorm:"column:role_name" json:"roleName"`
-	Value      string       `gorm:"column:value" json:"val"`
-	Priority   int          `gorm:"column:priority" json:"priority"`
-	Perms      []Permission `gorm:"many2many:role_perm" json:"perms"` // 多对多关系
-	CreateTime time.Time    `gorm:"column:create_time" json:"createTime"`
-	UpdateTime time.Time    `gorm:"column:update_time" json:"updateTime"`
-}
-
 // 用户表
 type User struct {
 	UserId   int    `gorm:"column:id" json:"userId"`
@@ -53,15 +26,6 @@ type User struct {
 }
 
 // 设置表名
-func (r *Permission) TableName() string {
-	return "permission"
-}
-func (r *RolePerm) TableName() string {
-	return "role_perm"
-}
-func (r *Role) TableName() string {
-	return "role"
-}
 func (u *User) TableName() string {
 	return "user"
 }
@@ -119,12 +83,6 @@ func (u *User) FindUserPageByCondition(nick string, current int, size int) ([]Us
 	}
 
 	return retUserList, total
-}
-
-// 查询所有角色
-func (r *Role) GetAllRoles() (roleList []Role, err error) {
-	err = orm.DB.Find(&roleList).Error
-	return
 }
 
 // 用户关联角色查询

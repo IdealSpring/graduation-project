@@ -4,34 +4,27 @@
 import request from '@/utils/request'
 
 export default {
-  /**
-   * 添加角色
-   * @param data
-   */
+  // 添加角色
   addRole(data) {
     return request({
-      url: '/sys_role',
+      url: '/auth/user/addRole',
       method: 'post',
       data
     })
   },
 
-  /**
-   * 删除角色
-   * @param data
-   */
+  // 删除角色
   deleteRole(data) {
     return request({
-      url: '/sys_role',
+      url: '/auth/user/role/delete',
       method: 'delete',
       data
     })
   },
 
   // 查询角色
-  queryRole(queryParam,pageParam) {
+  queryRole(queryParam, pageParam) {
     return request({
-      // url: '/sys_role/query',
       url: '/auth/user/roleQuery',
       method: 'post',
       data: {
@@ -42,26 +35,20 @@ export default {
     })
   },
 
-  /**
-   * 更新角色
-   * @param data
-   */
+  // 更新角色
   updateRole(data) {
     return request({
-      url: '/sys_role/info',
-      method: 'patch',
+      url: '/auth/user/role/updateRole',
+      method: 'put',
       data
     })
   },
 
-  /**
-   * 更新角色的权限
-   * @param perm
-   */
+  // 更新角色的权限
   updateRolePerms(data) {
     return request({
-      url: '/sys_role/perm',
-      method: 'patch',
+      url: '/auth/user/role/updatePerm',
+      method: 'put',
       data
     })
   },
@@ -90,13 +77,10 @@ export default {
     })
   },
 
-  /**
-   * 查选角色的所有权限值
-   * @param rid
-   */
+  // 查选角色的所有权限值
   findRolePerms(rid) {
     return request({
-      url: '/sys_role/'+rid+'/perms',
+      url: '/auth/user/rolePerms/' + rid,
       method: 'get'
     })
   }

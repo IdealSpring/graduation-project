@@ -3,17 +3,19 @@
 
     <el-row>
       <!--角色信息-->
-      <span class="page-title">编辑角色的权限：<el-tag type="info">{{role.rname}}</el-tag></span>
-      <router-link to="/system/role_manage" style="float:right">
+      <span class="page-title">编辑角色的权限：<el-tag type="info">{{role.roleName}}</el-tag></span>
+      <router-link to="/user/role_manage" style="float:right">
         <el-button type="text" icon="el-icon-back" >返回角色管理页面</el-button>
       </router-link>
     </el-row>
 
-    <div style="margin-bottom: 30px;"></div>
+    <div style="margin-bottom: 10px;"></div>
 
     <el-row :gutter="20">
+
+
       <!--菜单权限树-->
-      <el-col :span="8">
+      <el-col :span="12">
         <el-card class="box-card">
           <div slot="header">
             <div class="title-box" style="padding-top: 10px; padding-bottom: 13px;">
@@ -21,9 +23,16 @@
             </div>
             <span class="tips-text">提示：勾选权限即可为角色授权</span>
           </div>
+
           <el-input class="mgb-15" :placeholder="filterPlaceholderText" v-model="filterMenuPermText"></el-input>
-          <el-tree @check-change="handleUpdateMenuPermForRole" show-checkbox ref="menuPermTreeRef" :filter-node-method="filterNode"
-                   :data="menuPermissionTree" :props="treeProps" node-key="pval" default-expand-all :expand-on-click-node="false">
+
+          <el-tree @check-change="handleUpdateMenuPermForRole"
+                   show-checkbox ref="menuPermTreeRef"
+                   :filter-node-method="filterNode"
+                   :data="menuPermissionTree"
+                   :props="treeProps"
+                   node-key="pval"
+                   default-expand-all :expand-on-click-node="false">
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>
                 <span class="mgl-10">{{ data.pname }}</span>
@@ -35,54 +44,6 @@
         </el-card>
       </el-col>
 
-      <!--按钮权限树-->
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div slot="header">
-            <div class="title-box" style="padding-top: 10px; padding-bottom: 13px;">
-              <span><el-tag type="warning" >按钮</el-tag>&nbsp;权限元数据</span>
-            </div>
-            <span class="tips-text">提示：勾选权限即可为角色授权</span>
-          </div>
-          <el-input class="mgb-15" :placeholder="filterPlaceholderText" v-model="filterButtonPermText"></el-input>
-          <el-tree ref="buttonPermTreeRef" :filter-node-method="filterNode" :data="buttonPermissionTree"
-                   :props="treeProps" node-key="pid" default-expand-all :expand-on-click-node="false">
-            <span class="custom-tree-node" slot-scope="{ node, data }">
-                <span>
-                  <el-checkbox v-if="data.ptype==permType.BUTTON" v-model="btnCheckboxMap[data.pval]"
-                               @change="(checked)=>{handleUpdateBtnPermForRole(checked,data.pval)}"></el-checkbox>
-                  <span class="mgl-10">{{ data.pname }}</span>
-                  <span class="mgl-10 tips-text">{{ data.pval }}</span>
-                  <el-tag class="mgl-10" v-if="data.ptype==permType.MENU" type="success" size="mini">菜单</el-tag>
-                  <el-tag class="mgl-10" v-else-if="data.ptype==permType.BUTTON" type="warning" size="mini">按钮</el-tag>
-                </span>
-            </span>
-          </el-tree>
-        </el-card>
-      </el-col>
-
-      <!--接口权限树-->
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div slot="header">
-            <div class="title-box" style="padding-top: 10px; padding-bottom: 13px;">
-              <span><el-tag>接口</el-tag>&nbsp;权限元数据</span>
-            </div>
-            <span class="tips-text">提示：勾选权限即可为角色授权</span>
-          </div>
-          <el-input class="mgb-15" :placeholder="filterPlaceholderText" v-model="filterApiPermText"></el-input>
-          <el-tree @check-change="handleUpdateApiPermForRole" show-checkbox ref="apiPermTreeRef" :filter-node-method="filterNode"
-                   :data="apiPermissionTree" :props="treeProps" node-key="pval" default-expand-all :expand-on-click-node="false">
-            <span class="custom-tree-node" slot-scope="{node,data}">
-              <span>
-                <span class="mgl-10">{{ data.pname }}</span>
-                <span class="mgl-10 tips-text">{{ data.pval }}</span>
-                <el-tag class="mgl-10" size="mini">接口</el-tag>
-              </span>
-            </span>
-          </el-tree>
-        </el-card>
-      </el-col>
     </el-row>
 
   </div>
@@ -170,10 +131,10 @@
         //显示菜单权限树
         this.menuPermissionTree = tree.generateMenuPermissionTree()
         //显示按钮权限树
-        let menuPermissionTreeCopy = tree.generateMenuPermissionTree()
-        this.generateButtonPermissionTree(menuPermissionTreeCopy)
+        // let menuPermissionTreeCopy = tree.generateMenuPermissionTree()
+        // this.generateButtonPermissionTree(menuPermissionTreeCopy)
         //显示接口权限树
-        this.loadApiButtonPermissionTree()
+        // this.loadApiButtonPermissionTree()
         //加载角色的权限
         this.loadRolePerms()
       },
@@ -191,13 +152,15 @@
             this.roleMenuPvals = res.data.menuPvals
             this.$refs.menuPermTreeRef.setCheckedKeys(res.data.menuPvals)
           }
-          if(res.data.apiPvals.length>0){
-            this.roleApiPvals = res.data.menuPvals
-            this.$refs.apiPermTreeRef.setCheckedKeys(res.data.apiPvals)
+          // if(res.data.apiPvals.length>0){
+          //   this.roleApiPvals = res.data.menuPvals
+          //   this.$refs.apiPermTreeRef.setCheckedKeys(res.data.apiPvals)
+          //
+          // }
 
-          }
           //用于回显角色的按钮权限
-          this.roleBtnPvals = res.data.btnPvals
+          // this.roleBtnPvals = res.data.btnPvals
+
           //显示当前编辑的角色
           this.role = res.data.role
         })
@@ -235,10 +198,6 @@
 
       },
 
-
-
-
-
       /**
        * 更新角色的按钮权限
        * @param checked
@@ -273,12 +232,14 @@
         let checkedNodes = this.$refs.menuPermTreeRef.getCheckedNodes();
         let halfCheckedNodes = this.$refs.menuPermTreeRef.getHalfCheckedNodes();
         let pvals = [...checkedNodes,...halfCheckedNodes].map(perm=>perm.pval)
+
         //发送请求更新角色的权限
         let data = {
-          rid: this.roleId,
-          ptype: permType.MENU,
-          pvals: pvals
+          roleId: this.roleId,
+          permType: permType.MENU,
+          vals: pvals
         }
+
         roleApi.updateRolePerms(data).then(res=>{
           this.$message.success('更新菜单权限成功')
         })
