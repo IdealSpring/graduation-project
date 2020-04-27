@@ -52,6 +52,7 @@ func InitRouter() *gin.Engine {
 	{
 		release.POST("/queryProvince", PostQueryProvince)
 		release.GET("/option/province", GetAllProvice)
+		release.POST("/addProvince", PostAddProvince)
 	}
 
 	return r

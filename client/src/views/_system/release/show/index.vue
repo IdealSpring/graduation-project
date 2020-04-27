@@ -39,7 +39,7 @@
         myChart.setOption({
           backgroundColor: "#fff",
           title: {
-            text: '每日货盘运行图',
+            text: '发行省份一览图',
             left: 'center',
             textStyle: {
               color: '#000000'
