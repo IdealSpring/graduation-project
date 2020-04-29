@@ -70,5 +70,15 @@ func InitRouter() *gin.Engine {
 		operationLog.DELETE("/operation/deleteAll", DeleteDeleteAllOperationLog)
 	}
 
+	// 政务管理
+	politics := r.Group("/auth/politics")
+	politics.Use(middleware.AuthMiddleware)
+	{
+		politics.POST("/release/queryPoliticsToPage", PostQueryPoliticsToPage)
+		politics.POST("/release/addPolitics", PostAddPolitics)
+		politics.DELETE("/release/politics/delete/:politicsId", DeletePolitics)
+		politics.POST("/release/politicsNotify", PostPoliticsNotify)
+	}
+
 	return r
 }

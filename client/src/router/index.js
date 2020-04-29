@@ -125,19 +125,25 @@ export const asyncRouterMap = [
       {
         path: 'politics_guide_manage',
         name: 'politics_guide_manage',
-        component: _import('errorPage/404'),
+        component: _import('_system/politics/release/report-guide'),
         meta: { perm: 'm:politics:guide', title: '业务指导协调', noCache: true },
+      },
+      {
+        path: 'politics_upRelease_manage',
+        name: 'politics_upRelease_manage',
+        component: _import('_system/politics/release/release'),
+        meta: { perm: 'm:politics:upRelease', title: '上级政策文件', noCache: true }
       },
       {
         path: 'politics_report_manage',
         name: 'politics_report_manage',
-        component: _import('errorPage/404'),
+        component: _import('_system/politics/release/report-guide'),
         meta: { perm: 'm:politics:report', title: '工作汇报', noCache: true },
       },
       {
         path: 'politics_notify_manage',
         name: 'politics_notify_manage',
-        component: _import('errorPage/404'),
+        component: _import('_system/politics/release/notify'),
         meta: { perm: 'm:politics:notify', title: '发布通知', noCache: true },
       },
     ]

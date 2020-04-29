@@ -22,6 +22,9 @@ const user = {
   },
 
   mutations: {
+    SET_USER: (state, user) => {
+      state.user = user
+    },
     SET_CODE: (state, code) => {
       state.code = code
     },
@@ -88,6 +91,7 @@ const user = {
           } else {
             commit('SET_VISITOR', false)
           }
+          commit('SET_USER', res.data.user)
           commit('SET_ROLE', res.data.role)
           commit('SET_PERMS', res.data.perms)
           commit('SET_NICK', res.data.nick)
