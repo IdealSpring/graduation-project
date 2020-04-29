@@ -25,7 +25,7 @@ func LoginHandler(c *gin.Context) {
 	utils.AssertErr(err, -1)
 
 	// 设置 current_user
-	c.Set("current_user", models.User{UserId:user.UserId})
+	c.Set("current_user", models.User{UserId: user.UserId})
 
 	c.JSON(http.StatusOK, gin.H{
 		"succ":   true,
@@ -94,6 +94,7 @@ func GetUserInfo(c *gin.Context) {
 		"perms": user.Role.Perms,
 		"nick":  user.Nick,
 		"name":  user.Username,
+		"user":  user,
 	})
 }
 

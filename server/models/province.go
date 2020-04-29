@@ -42,7 +42,6 @@ func (p *Province) FindProvincePageByCondition(provinceName string, current int,
 		var count int
 		orm.DB.Model(&User{}).Where("province_id = ?", pro.ProvinceId).Count(&count)
 		proList[index].UserCount = count
-		//(pro).UserCount = count
 	}
 
 	return proList, total

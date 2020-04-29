@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <div class="pan-item" >
+      <div class="pan-item">
         <div class="pan-info"></div>
         <img class="pan-thumb" :src="avatar">
       </div>
@@ -12,7 +12,7 @@
         </div>
         <div>
           <span style="font-size:20px;padding-top:20px;display:inline-block;">角色：</span>
-          <el-tag style="margin-right: 5px;" type="danger" v-if="role == null" >游客（未配置任何角色）</el-tag>
+          <el-tag style="margin-right: 5px;" type="danger" v-if="role == null">游客（未配置任何角色）</el-tag>
           <el-tag style="margin-right: 5px;" type="success" v-else :key="role.val">{{role.roleName}}</el-tag>
         </div>
         <div>
@@ -20,7 +20,6 @@
           <el-tag style="margin-right: 5px;" type="danger" v-if="perms.length==0">未配置任何权限</el-tag>
           <el-tag style="margin-right: 5px;" type="info" v-else v-for="r in perms" :key="r.val">{{r.name}}</el-tag>
         </div>
-
 
       </div>
     </div>
@@ -31,13 +30,16 @@
 <script>
   import { mapGetters } from 'vuex'
   import PanThumb from '@/components/PanThumb'
+  import store from '@/store'
+  import releaseApi from '@/api/release'
 
   export default {
     name: 'dashboard',
     components: { PanThumb },
     data() {
       return {
-
+        // 当前用户
+        currentUser: store.getters.user
       }
     },
     computed: {
@@ -48,6 +50,42 @@
         'role',
         'perms'
       ])
+    },
+    created() {
+      this.getNotify()
+    },
+    methods: {
+      getNotify() {
+        // []
+        let politicsType = null
+
+        // 总局管理员获取报告
+        if (this.currentUser.roleId == 1) {
+          politicsType = 'report'
+        } else if (this.currentUser.roleId == 2) {
+          politicsType = 'guide'
+        } else {
+          politicsType = 'notify'
+        }
+
+        let param = {
+          userId: this.currentUser.userId,
+          politicsType: politicsType
+        }
+
+        releaseApi.getPoliticsNotify(param).then(res => {
+          let politicsList = res.data.politicsList
+
+          for (let p of politicsList) {
+            this.$notify.info({
+              title: p.title,
+              message: p.abstract,
+              duration: 0
+            })
+          }
+        })
+
+      }
     }
   }
 </script>
@@ -61,6 +99,7 @@
     overflow: hidden;
     box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.05);
   }
+
   .pan-item {
     float: left;
     z-index: 1;
@@ -72,6 +111,7 @@
     cursor: default;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
+
   .pan-thumb {
     width: 100%;
     height: 100%;
@@ -93,12 +133,14 @@
     background-color: #F2F6FC;
     min-height: 100vh;
     padding: 50px 60px 0px;
+
     .pan-info-roles {
       font-size: 12px;
       font-weight: 700;
       color: #333;
       display: block;
     }
+
     .info-container {
       position: relative;
       margin-left: 190px;

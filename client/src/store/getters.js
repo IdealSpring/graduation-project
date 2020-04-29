@@ -17,6 +17,7 @@ const getters = {
   perms: state => state.user.perms,
   visitor: state => state.user.visitor,
   setting: state => state.user.setting,
+  user: state => state.user.user,
 
   // 权限
   permission_routers: state => state.permission.routers,
