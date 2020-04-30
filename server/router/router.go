@@ -80,5 +80,25 @@ func InitRouter() *gin.Engine {
 		politics.POST("/release/politicsNotify", PostPoliticsNotify)
 	}
 
+	// 数据管理
+	data := r.Group("/auth/data")
+	data.Use(middleware.AuthMiddleware)
+	{
+		// 纳税人
+		data.POST("/taxpayer/queryTaxpayerToPage", PostQueryTaxpayerToPage)
+		data.POST("/taxpayer/uploadFile", PostUploadFile)
+		data.DELETE("/taxpayer/delete/:taxpayerId", DeleteTaxpayer)
+
+		// 发票
+		data.POST("/invoice/queryInvoiceToPage", PostQueryInvoiceToPage)
+		data.POST("/invoice/uploadFile", PostUploadInvoiceFile)
+		data.DELETE("/invoice/delete/:invoiceId", DeleteInvoice)
+
+		// 明细
+		data.POST("/details/queryInvoiceToPage", PostQueryInvoiceDetailsToPage)
+		data.POST("/details/uploadFile", PostUploadInvoiceDetailsFile)
+		data.DELETE("/details/delete/:id", DeleteInvoiceDetails)
+	}
+
 	return r
 }

@@ -71,7 +71,7 @@
       }
       return {
         loginForm: {
-          username: 'admin',
+          username: 'audit-admin',
           password: '123456'
         },
         loginRules: {
