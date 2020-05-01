@@ -107,14 +107,21 @@ export const asyncRouterMap = [
       {
         path: 'predicte_manage',
         name: 'predicte_manage',
-        component: _import('errorPage/404'),
+        component: _import('_system/predicte/predicte'),
         meta: { perm: 'm:predicte_analysis:predicte', title: '异常企业预测', noCache: true }
       },
       {
         path: 'analysis_manage',
         name: 'analysis_manage',
-        component: _import('errorPage/404'),
+        component: _import('_system/predicte/analysis'),
         meta: { perm: 'm:predicte_analysis:analysis', title: '异常企业分析', noCache: true }
+      },
+      {
+        hidden: true,
+        path: 'analysis_data',
+        name: 'analysis_data',
+        component: _import('_system/predicte/analysis_data'),
+        meta: { hiddenTag: true, title: '分析详情' }
       }
     ]
   },
@@ -135,12 +142,6 @@ export const asyncRouterMap = [
         name: 'statistics_areataxdata_manage',
         component: _import('_system/statistics/statistics'),
         meta: { perm: 'm:statistics:areataxdata', title: '各地区税收数据', noCache: true }
-      },
-      {
-        path: 'statistics_enterprisedata_manage',
-        name: 'statistics_enterprisedata_manage',
-        component: _import('_system/statistics/statistics'),
-        meta: { perm: 'm:statistics:enterprisedata', title: '企业数据', noCache: true }
       }
     ]
   },

@@ -100,5 +100,12 @@ func InitRouter() *gin.Engine {
 		data.DELETE("/details/delete/:id", DeleteInvoiceDetails)
 	}
 
+	predicte := r.Group("/auth/predicte")
+	predicte.Use(middleware.AuthMiddleware)
+	{
+		predicte.POST("/fileDownload", PostFileDownload)
+
+	}
+
 	return r
 }

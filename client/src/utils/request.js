@@ -32,7 +32,7 @@ service.interceptors.response.use(
    * 如通过xmlhttprequest 状态码标识 逻辑可写在下面error中
    */
   res => {
-    if(res.data.succ){
+    if(res.data.succ || res.status == 200){
       //如果后台返回的json显示成功，pass
       return res;
     }else{
