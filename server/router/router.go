@@ -104,7 +104,6 @@ func InitRouter() *gin.Engine {
 	predicte.Use(middleware.AuthMiddleware)
 	{
 		predicte.POST("/fileDownload", PostFileDownload)
-
 	}
 
 	return r
